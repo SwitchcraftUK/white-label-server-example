@@ -7,14 +7,12 @@ const fileLocation = process.env.FILE_LOCATION
   || 'http://sloth-move-static-production.s3-website.eu-west-2.amazonaws.com';
 
 
-app.get('/*', (req, res) => {
-  const url = `${fileLocation}${req.path}`;
-  request({ url, responseType: 'text' })
-    .then(resp => {
-      res.set('content-type', resp.headers['content-type']);
-      res.send(resp.data);
-    })
-    .catch(err => {});
+app.get('/*', async (req, res) => {
+  const isFilePath = req.path.split('.').length > 1;
+  const url = `${fileLocation}${isFilePath ? req.path : ''}`;
+  const resp = await request({ url, responseType: 'stream' });
+  res.set('content-type', resp.headers['content-type']);
+  resp.data.pipe(res);
 })
 
 app.listen(port, () => {
