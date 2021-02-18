@@ -4,7 +4,8 @@ const port = process.env.PORT || 3000;
 const { request } = require('gaxios');
 
 const fileLocation = process.env.FILE_LOCATION
-  || 'http://sloth-move-static-production.s3-website.eu-west-2.amazonaws.com';
+  // Add the AWS bucket URL here or set FILE_LOCATION env var to the bucket URL.
+  || 'http://aws-bucket-location-here.s3-website.eu-west-2.amazonaws.com';
 
 
 app.get('/*', async (req, res) => {
